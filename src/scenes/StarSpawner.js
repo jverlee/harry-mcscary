@@ -30,7 +30,7 @@ export default class StarSpawner
 			let stars = this.group.create(x, 16, 'star').setBounceY(bounceRate)
 		}
 
-		return;
+		return this.group;
 
 	}
 
