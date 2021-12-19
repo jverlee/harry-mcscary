@@ -114,21 +114,6 @@ export default class Game extends Phaser.Scene
 		return label
 	}
 
-	createStars()
-	{
-		const stars = this.physics.add.group({
-			key: 'star',
-			repeat: 11,
-			setXY: { x: 12, y: 0, stepX: 70 }
-		})
-		
-		stars.children.iterate((child) => {
-			child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8))
-		})
-
-		return stars
-	}
-
 	createPlatforms()
 	{
 		const platforms = this.physics.add.staticGroup()
