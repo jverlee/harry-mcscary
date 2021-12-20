@@ -8,14 +8,27 @@ export default class Player
 	constructor(scene)
 	{
 		this.scene = scene
+
+		this._group = this.scene.physics.add.group()
 	}
 
-	create()
+	get group()
+	{
+		return this._group
+	}
+
+	spawn(x)
 	{
 
-		const player = this.scene.physics.add.sprite(100, 450, 'dude')
-		player.setBounce(0.2)
-		player.setCollideWorldBounds(true)
+        return this.group.create(x, 425, 'dude')
+        		.setBounce(0.2)
+        		.setCollideWorldBounds(true)
+				.setVelocityY(0)
+
+	}
+
+	setAnimations()
+	{
 
 		this.scene.anims.create({
 			key: 'left',
@@ -37,7 +50,12 @@ export default class Player
 			repeat: -1
 		})
 
-		return player
+	}
+
+	setActions(player)
+	{
+
 
 	}
+
 }

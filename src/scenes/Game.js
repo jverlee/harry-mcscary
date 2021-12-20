@@ -2,7 +2,7 @@ import Phaser from 'phaser'
 import ScoreLabel from '../ui/ScoreLabel'
 import BombSpawner from './BombSpawner'
 import StarSpawner from './StarSpawner'
-import Player from './Player'
+import PlayerSpawner from './PlayerSpawner'
 
 export default class Game extends Phaser.Scene
 {
@@ -41,11 +41,18 @@ export default class Game extends Phaser.Scene
     create()
     {
 
-    	// environment, playtforms, players, and score
+    	// environment, playtforms, and score
     	this.add.image(400, 300, 'sky')
     	const platforms = this.createPlatforms()
-    	this.player = new Player(this).create();
     	this.scoreLabel = this.createScoreLabel(16, 16, 0)
+
+    	// player
+    	this.playerSpawner = new PlayerSpawner(this)
+    	const playersGroup = this.playerSpawner.group
+    	this.player = this.playerSpawner.spawn(100);
+    	this.player = this.playerSpawner.spawn(200);
+    	this.player = this.playerSpawner.spawn(300);
+    	this.playerSpawner.setAnimations();
 
     	// stars
     	this.starSpawner = new StarSpawner(this, 'star')
@@ -57,11 +64,11 @@ export default class Game extends Phaser.Scene
     	const bombsGroup = this.bombSpawner.group
 
     	// colliders
-    	this.physics.add.collider(this.player, platforms)
-    	this.physics.add.overlap(this.player, starsGroup, this.collectStar, null, this)
+    	this.physics.add.collider(playersGroup, platforms)
+    	this.physics.add.overlap(playersGroup, starsGroup, this.collectStar, null, this)
     	this.physics.add.collider(starsGroup, platforms)
     	this.physics.add.collider(bombsGroup, platforms)
-    	this.physics.add.collider(this.player, bombsGroup, this.hitBomb, null, this)
+    	this.physics.add.collider(playersGroup, bombsGroup, this.hitBomb, null, this)
 
     	// audio
     	this.ding = this.sound.add("ding", { loop: false });
