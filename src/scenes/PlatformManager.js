@@ -147,7 +147,7 @@ export default class PlatformManager
 			case "ice":
 		    	this.createPlatform(400, 550, 'iceBasePlatform', 'ice').setVisible(isVisible);
 		    	this.createPlatform(880, 400, 'icePlatform', 'ice').setVisible(isVisible);
-		    	this.createPlatform(-80, 250, 'icePlatform', 'ice').setVisible(isVisible);
+		    	this.createPlatform(-4, 250, 'icePlatform', 'ice').setVisible(isVisible);
 		    	this.createPlatform(1000, 220, 'icePlatform', 'ice').setVisible(isVisible);			
 				break;
 
