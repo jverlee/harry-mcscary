@@ -12,8 +12,6 @@ export default class StarSpawner
 
 		this._group = this.scene.physics.add.group()
 
-		console.log(this._group);
-
 	}
 
 	get group()

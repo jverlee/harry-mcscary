@@ -20,10 +20,20 @@ export default class PlatformManager
 		return this._group
 	}
 
-	create(x, y, key, world)
+	createPlatform(x, y, key, world)
 	{
 
-        let platform = this.group.create(x, y, key).setSize(810, 20, false).setOffset(0, 54)
+        let platform = this.group
+        	.create(x, y, key)
+        	.setSize(
+        		this.getSizeByKey(key).size.x,
+        		this.getSizeByKey(key).size.y,
+        		false
+        		)
+        	.setOffset(
+        		this.getSizeByKey(key).offset.x, 
+        		this.getSizeByKey(key).offset.y
+        		);
 
 		let screenWidth = 800;
 		let screenHeight = 600;
@@ -38,7 +48,6 @@ export default class PlatformManager
 		} else if (leftEdgeX < 0) {
 			platform.maxX = x;
 			platform.minX = 0 - platformWidth;
-			console.log(platform);
 		} else if (rightEdgeX > screenWidth) {
 			platform.maxX = screenWidth + platformWidth;
 			platform.minX = x;
@@ -48,6 +57,37 @@ export default class PlatformManager
 
 		return platform;
 
+	}
+
+	getSizeByKey(key)
+	{
+		switch (key) {
+
+			case "meadowsPlatform":
+				return { size: { x: 810, y: 20 }, offset: { x: 0, y: 54 } }
+				break;
+
+			case "cavePlatform":
+				return { size: { x: 810, y: 20 }, offset: { x: 0, y: 27 } }
+				break;
+
+			case "icePlatform":
+				return { size: { x: 711, y: 20 }, offset: { x: 0, y: 27 } }
+				break;
+
+			case "iceBasePlatform":
+				return { size: { x: 810, y: 20 }, offset: { x: 0, y: 33 } }
+				break;
+
+			case "lavaPlatform":
+				return { size: { x: 790, y: 20 }, offset: { x: 20, y: 18 } }
+				break;
+
+			default:
+				return { size: { x: 810, y: 20 }, offset: { x: 0, y: 0 } }
+				break;
+
+		}
 	}
 
 	stopAtLimits(platform)
@@ -85,23 +125,89 @@ export default class PlatformManager
 
 	}
 
+	createWorld(world, isVisible = true)
+	{
+
+		switch(world) {
+
+			case "meadows":
+		    	this.createPlatform(400, 550, 'meadowsPlatform', 'meadows').setVisible(isVisible);
+		    	this.createPlatform(880, 400, 'meadowsPlatform', 'meadows').setVisible(isVisible);
+		    	this.createPlatform(-80, 250, 'meadowsPlatform', 'meadows').setVisible(isVisible);
+		    	this.createPlatform(1000, 220, 'meadowsPlatform', 'meadows').setVisible(isVisible);
+				break;
+
+			case "cave":
+		    	this.createPlatform(400, 550, 'cavePlatform', 'cave').setVisible(isVisible);
+		    	this.createPlatform(880, 400, 'cavePlatform', 'cave').setVisible(isVisible);
+		    	this.createPlatform(-80, 250, 'cavePlatform', 'cave').setVisible(isVisible);
+		    	this.createPlatform(1000, 220, 'cavePlatform', 'cave').setVisible(isVisible);
+				break;
+
+			case "ice":
+		    	this.createPlatform(400, 550, 'iceBasePlatform', 'ice').setVisible(isVisible);
+		    	this.createPlatform(880, 400, 'icePlatform', 'ice').setVisible(isVisible);
+		    	this.createPlatform(-80, 250, 'icePlatform', 'ice').setVisible(isVisible);
+		    	this.createPlatform(1000, 220, 'icePlatform', 'ice').setVisible(isVisible);			
+				break;
+
+			case "lava":
+		    	this.createPlatform(400, 550, 'lavaPlatform', 'lava').setVisible(isVisible);
+		    	this.createPlatform(880, 400, 'lavaPlatform', 'lava').setVisible(isVisible);
+		    	this.createPlatform(-80, 250, 'lavaPlatform', 'lava').setVisible(isVisible);
+		    	this.createPlatform(1000, 220, 'lavaPlatform', 'lava').setVisible(isVisible);			
+				break;
+
+		}
+
+		// hide if not visible
+		if (!isVisible) { this.toggleWorld(world, 'hide'); }
+
+	}
+
 	toggleWorld(world, action)
 	{
 
+		// update background
+		if (action == 'show') {
+
+			switch(world) {
+				case "meadows":
+					this.scene.bg.setTexture('meadowsBg');
+					break;
+				case "cave":
+					this.scene.bg.setTexture('caveBg');
+					break;
+				case "ice":
+					this.scene.bg.setTexture('iceBg');
+					break;
+				case "lava":
+					this.scene.bg.setTexture('lavaBg');
+					break;
+			}
+
+		}
+
+		// show/hide platforms
 		this.group.children.iterate((platform, index) => {
 
-			if (action == 'hide') {
-				if (platform.minX || platform.maxX) {
-					(platform.x < 400) ? platform.setVelocityX(-150) : platform.setVelocityX(150)
-				} else if (platform.minY || platform.maxY) {
-					(platform.y < 300) ? platform.setVelocityY(-100) : platform.setVelocityY(100)
+			if(platform.world == world) {
+
+				if (action == 'hide') {
+					if (platform.minX || platform.maxX) {
+						(platform.x < 400) ? platform.setVelocityX(-150) : platform.setVelocityX(150)
+					} else if (platform.minY || platform.maxY) {
+						(platform.y < 300) ? platform.setVelocityY(-100) : platform.setVelocityY(100)
+					}
+				} else {
+					platform.setVisible(true); // ensure it's visible
+					if (platform.minX || platform.maxX) {
+						(platform.x < 400) ? platform.setVelocityX(150) : platform.setVelocityX(-150)
+					} else if (platform.minY || platform.maxY) {
+						(platform.y > 300) ? platform.setVelocityY(-100) : platform.setVelocityY(100);
+					}
 				}
-			} else {
-				if (platform.minX || platform.maxX) {
-					(platform.x < 400) ? platform.setVelocityX(150) : platform.setVelocityX(-150)
-				} else if (platform.minY || platform.maxY) {
-					(platform.y > 300) ? platform.setVelocityY(-100) : platform.setVelocityY(100);
-				}
+
 			}
 			
 		})
