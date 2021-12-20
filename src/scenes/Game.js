@@ -49,9 +49,9 @@ export default class Game extends Phaser.Scene
     	// player
     	this.playerSpawner = new PlayerSpawner(this)
     	const playersGroup = this.playerSpawner.group
-    	this.player = this.playerSpawner.spawn(100);
-    	this.player = this.playerSpawner.spawn(200);
-    	this.player = this.playerSpawner.spawn(300);
+    	this.player = this.playerSpawner.spawn(100, 'wasd');
+    	this.player = this.playerSpawner.spawn(200, 'arrows');
+    	this.player = this.playerSpawner.spawn(300, 'uhjk');
     	this.playerSpawner.setAnimations();
 
     	// stars
@@ -81,25 +81,9 @@ export default class Game extends Phaser.Scene
     update()
     {
 
-		if (this.gameOver)
-		{
-			return
-		}
+		if (this.gameOver) { return }
 
-        if (this.input.keyboard.addKey('A').isDown) {
-			this.player.setVelocityX(-160)
-			this.player.anims.play('left', true)
-        } else if (this.input.keyboard.addKey('D').isDown) {
-			this.player.setVelocityX(160)
-			this.player.anims.play('right', true)
-        } else {
-			this.player.setVelocityX(0)
-			this.player.anims.play('turn')
-        }
-
-        if (this.input.keyboard.addKey('W').isDown && this.player.body.touching.down) {
-            this.player.setVelocityY(-330)
-        }
+		this.playerSpawner.group.children.iterate((player) => this.playerSpawner.setActions(player))
 
     }
 
@@ -114,7 +98,8 @@ export default class Game extends Phaser.Scene
 
 		player.anims.play('turn')
 
-		this.gameOver = true
+		this.time.delayedCall(2000, () => { this.scene.restart(); }, [], this);
+
 	}
 
 	createScoreLabel(x, y, score)
