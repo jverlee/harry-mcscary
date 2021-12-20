@@ -18,6 +18,7 @@ export default class Game extends Phaser.Scene
 		this.bombSpawner = undefined
 		this.gameOver = false
 		this.platforms = undefined
+		this.difficulty = 20
 	}
 
 	preload()
@@ -55,9 +56,7 @@ export default class Game extends Phaser.Scene
 
     	// environment, playtforms, and score
     	this.bg = this.add.image(400, 300, 'meadowsBg')
-
     	this.scoreLabel = this.createScoreLabel(16, 16, 0)
-
     	this.levelManager = this.createLevelManager(630, 16, 1)
 
     	// platforms
@@ -72,8 +71,8 @@ export default class Game extends Phaser.Scene
     	this.playerSpawner = new PlayerSpawner(this)
     	const playersGroup = this.playerSpawner.group
     	this.playerSpawner.spawn(100, 'wasd');
-    	//this.playerSpawner.spawn(200, 'arrows');
-    	//this.playerSpawner.spawn(300, 'uhjk');
+    	this.playerSpawner.spawn(200, 'arrows');
+    	this.playerSpawner.spawn(300, 'uhjk');
     	this.playerSpawner.setAnimations();
 
     	// stars
@@ -198,7 +197,7 @@ export default class Game extends Phaser.Scene
 
 		// add harry mcscary
 		let randomNumber = Math.floor(Math.random() * 100);
-		if (randomNumber <= 2) { this.bombSpawner.spawn(player.x) }
+		if (randomNumber <= this.difficulty) { this.bombSpawner.spawn(player.x) }
 
 		// if all stars gone
 		if (this.starSpawner.countActive() === 0) { 
