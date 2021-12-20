@@ -3,18 +3,19 @@ import ScoreLabel from '../ui/ScoreLabel'
 import BombSpawner from './BombSpawner'
 import StarSpawner from './StarSpawner'
 import PlayerSpawner from './PlayerSpawner'
+import PlatformManager from './PlatformManager'
 
 export default class Game extends Phaser.Scene
 {
 	constructor()
 	{
 		super('game')
-		this.player = undefined
 		this.scoreLabel = undefined
 		this.starSpawner = undefined
 		this.stars = undefined
 		this.bombSpawner = undefined
 		this.gameOver = false
+		this.platforms = undefined
 	}
 
 	preload()
@@ -23,9 +24,10 @@ export default class Game extends Phaser.Scene
         this.load.image('sky', 'assets/backgrounds/blue-sky.png');
         this.load.image('redbg', 'assets/backgrounds/red-bg.png');
         this.load.image('ground', 'assets/platforms/platform.png');
-        this.load.image('greenPlatform1', 'assets/platforms/green1.png');
+        this.load.image('gardenPlatform', 'assets/platforms/green1.png');
         this.load.image('cavePlatform', 'assets/platforms/cave-platform.png');
         this.load.image('star', 'assets/objects/star.png');
+        this.load.image('pixel', 'assets/objects/transparent-pixel.png');
         this.load.image('bomb', 'assets/characters/black-monster.png');
         this.load.audio("ding", 'assets/sounds/ding.mp3');
         this.load.audio("harry", 'assets/sounds/harry-capture.mp3');
@@ -43,15 +45,22 @@ export default class Game extends Phaser.Scene
 
     	// environment, playtforms, and score
     	this.add.image(400, 300, 'sky')
-    	const platforms = this.createPlatforms()
     	this.scoreLabel = this.createScoreLabel(16, 16, 0)
 
+    	// platforms
+    	this.platformManager = new PlatformManager(this)
+    	this.platformManager.create(400, 550, 'gardenPlatform', 'meadows')
+    	this.platformManager.create(880, 400, 'gardenPlatform', 'meadows')
+    	this.platformManager.create(-80, 250, 'gardenPlatform', 'meadows')
+    	this.platformManager.create(1000, 220, 'gardenPlatform', 'meadows')
+    	this.platforms = this.platformManager.group
+    	
     	// player
     	this.playerSpawner = new PlayerSpawner(this)
     	const playersGroup = this.playerSpawner.group
-    	this.player = this.playerSpawner.spawn(100, 'wasd');
-    	this.player = this.playerSpawner.spawn(200, 'arrows');
-    	this.player = this.playerSpawner.spawn(300, 'uhjk');
+    	this.playerSpawner.spawn(100, 'wasd');
+    	//this.playerSpawner.spawn(200, 'arrows');
+    	//this.playerSpawner.spawn(300, 'uhjk');
     	this.playerSpawner.setAnimations();
 
     	// stars
@@ -64,10 +73,10 @@ export default class Game extends Phaser.Scene
     	const bombsGroup = this.bombSpawner.group
 
     	// colliders
-    	this.physics.add.collider(playersGroup, platforms)
+    	this.physics.add.collider(playersGroup, this.platforms)
     	this.physics.add.overlap(playersGroup, starsGroup, this.collectStar, null, this)
-    	this.physics.add.collider(starsGroup, platforms)
-    	this.physics.add.collider(bombsGroup, platforms)
+    	this.physics.add.collider(starsGroup, this.platforms)
+    	this.physics.add.collider(bombsGroup, this.platforms)
     	this.physics.add.collider(playersGroup, bombsGroup, this.hitBomb, null, this)
 
     	// audio
@@ -83,7 +92,11 @@ export default class Game extends Phaser.Scene
 
 		if (this.gameOver) { return }
 
-		this.playerSpawner.group.children.iterate((player) => this.playerSpawner.setActions(player))
+		// listen for player input
+		this.playerSpawner.group.children.iterate((player) => this.playerSpawner.listenToControls(player))
+
+		// ensure platforms don't extend beyond their limits
+		this.platforms.children.iterate((platform) => this.platformManager.stopAtLimits(platform))
 
     }
 
@@ -98,7 +111,7 @@ export default class Game extends Phaser.Scene
 
 		player.anims.play('turn')
 
-		this.time.delayedCall(2000, () => { this.scene.restart(); }, [], this);
+		this.time.delayedCall(2000, () => { this.scene.restart(); }, [], this); // restart game after x milliseconds
 
 	}
 
@@ -112,20 +125,6 @@ export default class Game extends Phaser.Scene
 		return label
 	}
 
-	createPlatforms()
-	{
-		const platforms = this.physics.add.staticGroup()
-
-		platforms.create(400, 568, 'ground').setScale(2).refreshBody()
-	
-		platforms.create(600, 400, 'ground')
-		platforms.create(50, 250, 'ground')
-		platforms.create(750, 220, 'ground')
-
-		return platforms
-
-	}
-
 	collectStar(player, star)
 	{
 
@@ -136,8 +135,22 @@ export default class Game extends Phaser.Scene
 		// add harry mcscary
 		if (this.starSpawner.countActive() === 0 || this.starSpawner.countActive() === 6) { this.bombSpawner.spawn(player.x) }
 
-		// add stars back
-		if (this.starSpawner.countActive() === 0) { this.starSpawner.reset() }
+		// if all stars gone
+		if (this.starSpawner.countActive() === 0) { 
+
+			// tada noise
+			this.tada.play()
+
+			// hide current world
+			this.platformManager.toggleWorld('meadow', 'hide');
+
+			// reset stars after giving time for world to reload
+			this.time.delayedCall(3000, () => { this.platformManager.toggleWorld('meadow', 'show'); }, [], this);
+
+			// reset stars after giving time for world to reload
+			this.time.delayedCall(7000, () => { this.starSpawner.reset(); }, [], this);
+			
+		}
 
 	}	
 

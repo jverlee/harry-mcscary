@@ -56,7 +56,7 @@ export default class Player
 
 	}
 
-	setActions(player)
+	listenToControls(player)
 	{
 
 		let controls = this.getControls(player);

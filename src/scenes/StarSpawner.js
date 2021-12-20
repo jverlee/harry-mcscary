@@ -36,8 +36,6 @@ export default class StarSpawner
 
 	reset() {
 
-		this.scene.tada.play()
-
 		this.group.children.iterate((child) => {
 			child.enableBody(true, child.x, 0, true, true)
 		})
