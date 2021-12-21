@@ -1,19 +1,24 @@
 <html>
 	<head>
-		<title>Phaser3 + Parceljs Template</title>
+		<title>Harry McScary</title>
+		<meta name="description" content="Collect all the stars as quickly as possible without getting caught by Harry McScary." />
 		<script src="main.js"></script>
 		<style>
 			body {background-color: #59d37d;}
 			h1   {color: black; text-align: center; }
-			canvas { border-radius: 10px; }
-		</style>		
+			#game canvas { border-radius: 10px; }
+		</style>	
+		<link rel="apple-touch-icon" sizes="180x180" href="images/favicons/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="images/favicons/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="images/favicons/favicon-16x16.png">
+		<link rel="mask-icon" href="images/favicons/safari-pinned-tab.svg" color="#5bbad5">
+		<meta name="msapplication-TileColor" content="#da532c">
+		<meta name="theme-color" content="#ffffff">			
 	</head>
 	<body style="margin: 0px;">
 
 		<div>
-			<div style="height: 100px;">&nbsp;</div>
-			<div id="game"></div>
-			<div style="height: 100px;">&nbsp;</div>
+			<div id="game" style="margin: 150px 0px;"></div>
 		</div>
 
 		<div style="background: #fff; padding: 30px; box-shadow: inset 0 20px 20px -20px rgba(0,0,0,0.8);">
@@ -24,13 +29,19 @@
 					<img src="images/devs.png" style="width: 100%; max-width: 400px;" />
 				</div>
 
-				<p>
-					<b>Harry McScary was expertly constructed by Ella, Easton, and Emmie VerLee 🎉.</b>
+				<p style="font-size: 1.2em;">
+					<b>Harry McScary is a collaborative game that was expertly constructed by Ella, Easton, and Emmie VerLee 🎉.</b>
 				</p>
 
 				<p>
 					Additionally Mom provided audio engineering support and Dad managed to pluck the right keys to form coherent JavaScript. This project was created during the 2021 Christmas season 🎄.
 				</p>
+
+
+				<p>
+					For the family 👪 the goal was to create a game our kids could help design, shifting gaming to be a more creative rather than consuming endeavor. Further, we wanted it to be a single-screen multiplayer collaborative game to emphasize in-person teamwork.
+				</p>
+
 
 				<p>
 					For the 🤓... Harry McScary uses the <a href="https://phaser.io/" target="_blank">JavaScript-based Phaser engine</a>. Major props to <a href="https://phaser.io/tutorials/making-your-first-phaser-3-game/part1" target="_blank">Phaser's first game tutorial</a> and <a href="https://blog.ourcade.co/posts/2020/make-first-phaser-3-game-modern-javascript-part1/" target="_blank">Super Tommy's modern adaptation of Phaser</a> for making it so easy to step into JavaScript game development with Phaser.
