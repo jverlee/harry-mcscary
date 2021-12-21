@@ -5,6 +5,7 @@ import BombSpawner from './BombSpawner'
 import StarSpawner from './StarSpawner'
 import PlayerSpawner from './PlayerSpawner'
 import PlatformManager from './PlatformManager'
+import TimerManager from './TimerManager'
 
 export default class Game extends Phaser.Scene
 {
@@ -18,8 +19,14 @@ export default class Game extends Phaser.Scene
 		this.bombSpawner = undefined
 		this.gameOver = false
 		this.platforms = undefined
-		this.difficulty = 20
+		this.difficulty = 20 // 100 = hardest; -1 = easiest
+		this.playerCount = 3
 	}
+
+    init(data)
+    {
+        this.playerCount = (data.playerCount) ? data.playerCount : this.playerCount;
+    }
 
 	preload()
     {
@@ -61,18 +68,20 @@ export default class Game extends Phaser.Scene
 
     	// platforms
     	this.platformManager = new PlatformManager(this)
-    	this.platformManager.createWorld('meadows', true);
+    	this.platformManager.createWorld('meadows', false);
     	this.platformManager.createWorld('cave', false);
     	this.platformManager.createWorld('ice', false);
-    	this.platformManager.createWorld('lava', false);
+    	this.platformManager.createWorld('lava', true);
     	this.platforms = this.platformManager.group // able to reference from this.platforms
     	
+    	// timer
+    	this.timerManager = new TimerManager(this)
+    	this.timerManager.add();
+
     	// player
     	this.playerSpawner = new PlayerSpawner(this)
     	const playersGroup = this.playerSpawner.group
-    	this.playerSpawner.spawn(100, 'wasd');
-    	this.playerSpawner.spawn(200, 'arrows');
-    	this.playerSpawner.spawn(300, 'uhjk');
+    	this.spawnPlayers();
     	this.playerSpawner.setAnimations();
 
     	// stars
@@ -104,6 +113,21 @@ export default class Game extends Phaser.Scene
 
     }
 
+    spawnPlayers()
+    {
+    	if (this.playerCount == 1) {
+	    	this.playerSpawner.spawn(100, 'wasd');
+    	} else if (this.playerCount == 2) {
+	    	this.playerSpawner.spawn(100, 'wasd');
+	    	this.playerSpawner.spawn(200, 'arrows');
+    	} else if (this.playerCount == 3) {
+	    	this.playerSpawner.spawn(100, 'wasd');
+	    	this.playerSpawner.spawn(200, 'arrows');
+	    	this.playerSpawner.spawn(300, 'uhjk');    		
+    	}
+
+    }
+
     update()
     {
 
@@ -114,6 +138,8 @@ export default class Game extends Phaser.Scene
 
 		// ensure platforms don't extend beyond their limits
 		this.platforms.children.iterate((platform) => this.platformManager.stopAtLimits(platform))
+
+		//this.timerManager.tick()
 
     }
 
@@ -185,7 +211,7 @@ export default class Game extends Phaser.Scene
 	{
 		this.bgMusic.stop()
 		this.tada.play();
-		this.scene.start('win');
+		this.scene.start('complete');
 	}
 
 	collectStar(player, star)

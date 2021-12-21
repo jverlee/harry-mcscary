@@ -139,23 +139,23 @@ export default class PlatformManager
 
 			case "cave":
 		    	this.createPlatform(400, 550, 'cavePlatform', 'cave').setVisible(isVisible);
-		    	this.createPlatform(880, 400, 'cavePlatform', 'cave').setVisible(isVisible);
-		    	this.createPlatform(-80, 250, 'cavePlatform', 'cave').setVisible(isVisible);
-		    	this.createPlatform(1000, 220, 'cavePlatform', 'cave').setVisible(isVisible);
+		    	this.createPlatform(810, 400, 'cavePlatform', 'cave').setVisible(isVisible);
+		    	this.createPlatform(890, 250, 'cavePlatform', 'cave').setVisible(isVisible);
+		    	this.createPlatform(1020, 100, 'cavePlatform', 'cave').setVisible(isVisible);
 				break;
 
 			case "ice":
 		    	this.createPlatform(400, 550, 'iceBasePlatform', 'ice').setVisible(isVisible);
-		    	this.createPlatform(880, 400, 'icePlatform', 'ice').setVisible(isVisible);
-		    	this.createPlatform(-4, 250, 'icePlatform', 'ice').setVisible(isVisible);
-		    	this.createPlatform(1000, 220, 'icePlatform', 'ice').setVisible(isVisible);			
+		    	this.createPlatform(-1, 400, 'icePlatform', 'ice').setVisible(isVisible);
+		    	this.createPlatform(-100, 250, 'icePlatform', 'ice').setVisible(isVisible);
+		    	this.createPlatform(900, 220, 'icePlatform', 'ice').setVisible(isVisible);			
 				break;
 
 			case "lava":
 		    	this.createPlatform(400, 550, 'lavaPlatform', 'lava').setVisible(isVisible);
 		    	this.createPlatform(880, 400, 'lavaPlatform', 'lava').setVisible(isVisible);
 		    	this.createPlatform(-80, 250, 'lavaPlatform', 'lava').setVisible(isVisible);
-		    	this.createPlatform(1000, 220, 'lavaPlatform', 'lava').setVisible(isVisible);			
+		    	this.createPlatform(1000, 140, 'lavaPlatform', 'lava').setVisible(isVisible);			
 				break;
 
 		}
@@ -197,7 +197,7 @@ export default class PlatformManager
 					if (platform.minX || platform.maxX) {
 						(platform.x < 400) ? platform.setVelocityX(-150) : platform.setVelocityX(150)
 					} else if (platform.minY || platform.maxY) {
-						(platform.y < 300) ? platform.setVelocityY(-100) : platform.setVelocityY(100)
+						(platform.y < 300) ? platform.setVelocityY(-10) : platform.setVelocityY(10)
 					}
 				} else {
 					platform.setVisible(true); // ensure it's visible

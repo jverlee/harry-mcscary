@@ -17,10 +17,10 @@ export default class Player
 		return this._group
 	}
 
-	spawn(x, controls)
+	spawn(x, controls, key = 'dude')
 	{
 
-        let player = this.group.create(x, 425, 'dude')
+        let player = this.group.create(x, 425, key)
         		.setBounce(0.2)
         		.setCollideWorldBounds(true)
 				.setVelocityY(0)

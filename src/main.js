@@ -2,12 +2,14 @@ import Phaser from 'phaser'
 
 import HelloWorldScene from './scenes/HelloWorldScene'
 import Game from './scenes/Game'
-import Win from './scenes/Win'
+import Complete from './scenes/Complete'
+import Welcome from './scenes/Welcome'
 
 const config = {
 	type: Phaser.AUTO,
 	width: 800,
 	height: 600,
+	parent: 'game',
     scale: {
         mode: Phaser.Scale.FIT,
         parent: 'phaser-example',
@@ -15,14 +17,17 @@ const config = {
         width: 800,
         height: 600
     },
+    dom: {
+        createContainer: true
+    },
 	physics: {
 		default: 'arcade',
 		arcade: {
 			gravity: { y: 300 },
-			debug: false
+			debug: true
 		}
 	},
-	scene: [Game, Win]
+	scene: [Game, Welcome, Complete]
 }
 
 export default new Phaser.Game(config)

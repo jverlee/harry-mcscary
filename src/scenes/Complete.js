@@ -1,10 +1,10 @@
 import Phaser from 'phaser'
 
-export default class Win extends Phaser.Scene
+export default class Complete extends Phaser.Scene
 {
 	constructor()
 	{
-		super('win')
+		super('complete')
 	}
 
 	preload()
