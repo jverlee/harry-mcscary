@@ -1,4 +1,4 @@
-![harry-mcscary](https://github.com/jverlee/harry-mcscary/blob/main/src/images/harry-mcscary.png?raw=true)
+![harry-mcscary](https://github.com/jverlee/harry-mcscary/blob/main/src/images/harry-mcscary.png?raw=true | width=100)
 
 ## Getting Started
 
