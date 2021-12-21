@@ -61,17 +61,19 @@ export default class Game extends Phaser.Scene
     create()
     {
 
+    	this.game.sound.stopAll(); // stop any sound that may still be going
+
     	// environment, playtforms, and score
     	this.bg = this.add.image(400, 300, 'meadowsBg')
     	this.scoreLabel = this.createScoreLabel(16, 16, 0)
-    	this.levelManager = this.createLevelManager(630, 16, 1)
+    	this.levelManager = this.createLevelManager(630, 16, 1).setVisible(false)
 
     	// platforms
     	this.platformManager = new PlatformManager(this)
-    	this.platformManager.createWorld('meadows', false);
+    	this.platformManager.createWorld('meadows', true);
     	this.platformManager.createWorld('cave', false);
     	this.platformManager.createWorld('ice', false);
-    	this.platformManager.createWorld('lava', true);
+    	this.platformManager.createWorld('lava', false);
     	this.platforms = this.platformManager.group // able to reference from this.platforms
     	
     	// timer
@@ -173,24 +175,40 @@ export default class Game extends Phaser.Scene
 	hitBomb(player, bomb)
 	{
 
-		this.bgMusic.stop()
-
 		this.oof.play();
-
-		this.physics.pause()
 
 		player.setTint(0xff0000)
 
 		player.anims.play('turn')
 
-		this.time.delayedCall(2000, () => { this.scene.restart(); }, [], this); // restart game after x milliseconds
+		this.gameDone(false)
+
+	}
+
+	gameDone(isComplete)
+	{
+
+		this.bgMusic.stop()
+		this.physics.pause()
+
+		this.timerManager.stopTimer();
+
+		this.time.delayedCall(2000, () => { 
+
+			this.scene.start('complete', { 
+				score: this.scoreLabel.score, 
+				timeLeft: this.timerManager.timeLeft,
+				complete: isComplete, 
+				playerCount: this.playerCount
+			});
+
+		}, [], this); // end screen after x milliseconds
 
 	}
 
 	createScoreLabel(x, y, score)
 	{
-		const style = { fontSize: '32px', fill: '#000' }
-		const label = new ScoreLabel(this, x, y, score, style)
+		const label = new ScoreLabel(this, x, y, score).setFontSize(30).setColor('#000000').setFontFamily("Arial");
 
 		this.add.existing(label)
 
@@ -205,13 +223,6 @@ export default class Game extends Phaser.Scene
 		this.add.existing(label)
 
 		return label
-	}
-
-	win()
-	{
-		this.bgMusic.stop()
-		this.tada.play();
-		this.scene.start('complete');
 	}
 
 	collectStar(player, star)
@@ -239,7 +250,7 @@ export default class Game extends Phaser.Scene
 			this.platformManager.toggleWorld(completedWorld, 'hide');
 
 			// check if won game
-			if (this.levelManager.level == 4) { this.win(); }
+			if (this.levelManager.level == 4) { this.gameDone(true); }
 
 			// next level
 			this.levelManager.add()

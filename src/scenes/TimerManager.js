@@ -8,7 +8,7 @@ export default class TimerManager
 	constructor(scene)
 	{
 		this.scene = scene
-		this.timeLeft = 100; // starting time
+		this.timeLeft = 120; // starting time
 		this.timeLeftDisplay = undefined
 		this.timer = undefined
 
@@ -17,7 +17,7 @@ export default class TimerManager
 
 	add()
 	{
-		this.timeLeftDisplay = this.scene.add.text(0, 0, this.timeLeft, { font: '"Arial"' });
+		this.timeLeftDisplay = this.scene.add.text(730, 15, this.timeLeft).setFontSize(30).setColor('#000000').setFontFamily("Arial");
 		this.startTimer()
 	}
 
@@ -41,8 +41,10 @@ export default class TimerManager
 	tick() {
 		this.timeLeft--;
 		this.timeLeftDisplay.setText(this.timeLeft);
-		if (this.timeLeft < 10) { this.timeLeftDisplay.setColor('#ff0000') }
-		this.stopTimer();
+		if (this.timeLeft < 25) { this.timeLeftDisplay.setColor('#ff0000') }
+		if (this.timeLeft <= 0) { 
+			this.scene.gameDone();
+		}
 	}
 
 }
