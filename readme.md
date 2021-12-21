@@ -1,4 +1,6 @@
-<img src="https://github.com/jverlee/harry-mcscary/blob/main/src/images/harry-mcscary.png?raw=true" width="100">
+<p align="center">
+    <img src="https://github.com/jverlee/harry-mcscary/blob/main/src/images/harry-mcscary.png?raw=true" width="100">
+</p>
 
 ## Getting Started
 
