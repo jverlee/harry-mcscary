@@ -261,7 +261,9 @@ export default class Complete extends Phaser.Scene
                 context.displayScoreNotRanked();
             }
 
-          });
+          }).catch(function() {
+            context.displayScoreNotRanked(); // if leaderboard can't be loaded, allow game to still work and keep playing
+          });;
 
     }
 
