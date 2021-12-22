@@ -5,6 +5,7 @@ export default class Win extends Phaser.Scene
 	constructor()
 	{
 		super('welcome')
+        this.rankings = undefined;
 	}
 
 	preload()
