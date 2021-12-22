@@ -129,7 +129,7 @@ export default class Complete extends Phaser.Scene
                     game: "harrymcscary"
                 }
 
-              fetch('https://localhost:8000/rank', {
+              fetch('https://jdv-leaderboard.herokuapp.com/rank', {
                 method: 'post',
                 body: JSON.stringify(payload),
                 headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -233,7 +233,7 @@ export default class Complete extends Phaser.Scene
         let initialY = 30;
         let scoreToBeat = 999999999999999;
 
-        fetch('https://localhost:8000/rank')
+        fetch('https://jdv-leaderboard.herokuapp.com/rank')
           .then(response => response.json())
           .then(data => {
 
