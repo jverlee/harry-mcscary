@@ -40,7 +40,7 @@ export default class Complete extends Phaser.Scene
         this.game.sound.stopAll(); // stop any sound that may still be going
 
         this.bgMusic = this.sound.add("win", { loop: true });
-        //this.bgMusic.play();
+        this.bgMusic.play();
 
         this.add.image(400, 300, 'background')
 
